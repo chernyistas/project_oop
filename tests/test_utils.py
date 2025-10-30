@@ -11,6 +11,7 @@ from src.utils import create_objects_from_json, read_json
     read_data='[{"name": "Смартфоны", ' '"description": "desc", "products": []}]',
 )
 def test_read_json_success(mock_file: str) -> None:
+    """Проверяет успешное чтение и парсинг JSON-файла, содержащего список словарей."""
     data = read_json("fake_path.json")
     assert isinstance(data, list)
     assert isinstance(data[0], dict)
@@ -19,18 +20,21 @@ def test_read_json_success(mock_file: str) -> None:
 
 @patch("builtins.open", new_callable=mock_open, read_data='{"wrong": "format"}')
 def test_read_json_not_list(mock_file: str) -> None:
+    """Проверяет, что при чтении JSON, не являющегося списком, функция read_json вызывает TypeError."""
     with pytest.raises(TypeError):
         read_json("fake_path.json")
 
 
 @patch("builtins.open", new_callable=mock_open, read_data='["string"]')
 def test_read_json_item_not_dict(mock_file: str) -> None:
+    """Проверяет, что при чтении JSON, где элементы списка не являются словарями, вызывается TypeError."""
     with pytest.raises(TypeError):
         read_json("fake_path.json")
 
 
 # Тесты для create_objects_from_json
 def test_create_objects_from_json() -> None:
+    """Проверяет создание объектов из заданного JSON-структурированного списка."""
     json_data = [
         {
             "name": "Смартфоны",

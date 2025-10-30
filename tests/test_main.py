@@ -2,6 +2,7 @@ from main import Category, Product
 
 
 def test_product_init(product1: Product, product2: Product, product3: Product) -> None:
+    """Проверяет правильную инициализацию объектов Product."""
     assert product1.name == "Samsung Galaxy S23 Ultra"
     assert product1.description == "256GB, Серый цвет, 200MP камера"
     assert product1.price == 180000.0
@@ -19,6 +20,7 @@ def test_product_init(product1: Product, product2: Product, product3: Product) -
 
 
 def test_product_types(product1: Product) -> None:
+    """Проверяет типы данных атрибутов объекта Product."""
     assert isinstance(product1.name, str)
     assert isinstance(product1.description, str)
     assert isinstance(product1.price, float)
@@ -26,6 +28,7 @@ def test_product_types(product1: Product) -> None:
 
 
 def test_category_and_product_count(category1: Category, product4: Product) -> None:
+    """Проверяет обновление счетчиков категорий и продуктов при создании новой категории."""
     Category(
         "Телевизоры",
         "Современный телевизор, который позволяет наслаждаться просмотром, станет вашим другом и помощником",
@@ -37,6 +40,7 @@ def test_category_and_product_count(category1: Category, product4: Product) -> N
 
 
 def test_category_init(category1: Category, product1: Product, product2: Product, product3: Product) -> None:
+    """Проверяет корректность инициализации объекта Category."""
     assert category1.name == "Смартфоны"
     assert category1.description == (
         "Смартфоны, как средство не только коммуникации, " "но и получения дополнительных функций для удобства жизни"
