@@ -2,7 +2,7 @@ import json
 import os
 from typing import Any
 
-from main import Category, Product
+from src.models import Category, Product
 
 
 def read_json(path: str) -> list[dict[str, Any]]:
