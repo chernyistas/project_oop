@@ -96,9 +96,9 @@ def test_products_property(product1: Product, product2: Product, product3: Produ
     category = Category("Смартфоны", "Мобильные телефоны", [product1, product2, product3])
 
     expected = (
-        "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт.\n"
-        "Iphone 15, 210000.0 руб. Остаток: 8 шт.\n"
-        "Xiaomi Redmi Note 11, 31000.0 руб. Остаток: 14 шт.\n"
+        "Samsung Galaxy S23 Ultra, 180000 руб. Остаток: 5 шт.\n"
+        "Iphone 15, 210000 руб. Остаток: 8 шт.\n"
+        "Xiaomi Redmi Note 11, 31000 руб. Остаток: 14 шт.\n"
     )
 
     assert category.products == expected

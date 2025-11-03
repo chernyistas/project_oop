@@ -81,7 +81,7 @@ class Category:
     def products(self) -> str:
         result = ""
         for product in self.__products:
-            result += f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт.\n"
+            result += f"{product.name}, {int(product.price)} руб. Остаток: {product.quantity} шт.\n"
         return result
 
     @property
