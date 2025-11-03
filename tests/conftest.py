@@ -34,3 +34,13 @@ def category1(product1: Product, product2: Product, product3: Product) -> Catego
         "Смартфоны, как средство не только коммуникации, " "но и получения дополнительных функций для удобства жизни",
         [product1, product2, product3],
     )
+
+
+@pytest.fixture()
+def data() -> dict:
+    return {
+        "name": "Samsung Galaxy S23 Ultra",
+        "description": "256GB, Серый цвет, 200MP камера",
+        "price": 180000.0,
+        "quantity": 5,
+    }
