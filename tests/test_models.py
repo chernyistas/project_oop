@@ -53,7 +53,7 @@ def test_category_init(category1: Category, product1: Product, product2: Product
 
 
 def test_create_new_product(data: dict) -> None:
-    """Тест создание нового продукта"""
+    """Тест на создание нового продукта"""
     product = Product.new_product(data)
     assert product.name == "Samsung Galaxy S23 Ultra"
     assert product.description == "256GB, Серый цвет, 200MP камера"
@@ -62,7 +62,7 @@ def test_create_new_product(data: dict) -> None:
 
 
 def test_update_existing_product(data: dict) -> None:
-    """Тест обновления существующего продукта"""
+    """Тест на обновления существующего продукта"""
     existing = [Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 195000, 3)]
     update_product = Product.new_product(data, existing)
 
@@ -72,7 +72,7 @@ def test_update_existing_product(data: dict) -> None:
 
 
 def test_update_existing_product_price_no_change(data: dict) -> None:
-    """Тест обновления продукта, когда новая цена меньше текущей."""
+    """Тест на обновления продукта, когда новая цена меньше текущей."""
     existing = [Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000, 3)]
     update_product = Product.new_product(data, existing)
     assert update_product.price == 180000
