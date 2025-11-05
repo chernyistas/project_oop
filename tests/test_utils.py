@@ -54,8 +54,8 @@ def test_create_objects_from_json() -> None:
     cat = categories[0]
     assert cat.name == "Смартфоны"
     assert cat.description == "desc"
-    assert len(cat.products) == 1
-    prod = cat.products[0]
+    assert len(cat.product_list) == 1
+    prod = cat.product_list[0]
     assert prod.name == "Samsung Galaxy C23 Ultra"
     assert prod.price == 180000.0
     assert prod.quantity == 5
