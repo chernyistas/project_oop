@@ -1,4 +1,6 @@
-from src.models import Category, Product
+import pytest
+
+from src.models import Category, Product, ProductIterator
 
 
 def test_product_init(product1: Product, product2: Product, product3: Product) -> None:
@@ -109,3 +111,36 @@ def test_product_list_property(product1: Product, product2: Product, product3: P
     category = Category("Смартфоны", "Мобильные телефоны", [product1, product2, product3])
     result = category.product_list
     assert result == [product1, product2, product3]
+
+
+def test_product_str(product1: Product, product2: Product, product3: Product) -> None:
+    """Тест на строковое представление объекта Product"""
+    assert str(product1) == "Samsung Galaxy S23 Ultra, 180000 руб. Остаток: 5 шт."
+    assert str(product2) == "Iphone 15, 210000 руб. Остаток: 8 шт."
+    assert str(product3) == "Xiaomi Redmi Note 11, 31000 руб. Остаток: 14 шт."
+
+
+def test_product_add(product1: Product, product2: Product) -> None:
+    """Тест на проверку суммирования стоимости товаров двух объектов Product"""
+    result = product1 + product2
+    assert result == 2580000
+
+    not_a_product = "not a product"
+    result = product1.__add__(not_a_product)
+    assert result is NotImplemented
+
+
+def test_category_str(category1: Category) -> None:
+    """Тест на строковое представление объекта Category"""
+    assert str(category1) == "Смартфоны, количество продуктов: 27"
+
+
+def test_product_iterator(category1: Category) -> None:
+    """Тест на итератор по списку продуктов категории"""
+    iterator = ProductIterator(category1)
+    assert str(next(iterator)) == "Samsung Galaxy S23 Ultra, 180000 руб. Остаток: 5 шт."
+    assert str(next(iterator)) == "Iphone 15, 210000 руб. Остаток: 8 шт."
+    assert str(next(iterator)) == "Xiaomi Redmi Note 11, 31000 руб. Остаток: 14 шт."
+
+    with pytest.raises(StopIteration):
+        next(iterator)
