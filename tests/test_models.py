@@ -36,7 +36,7 @@ def test_category_and_product_count(category1: Category, product4: Product) -> N
     )
 
     assert Category.category_count == 2
-    assert Category.product_count == 4
+    assert Category.product_count == 34
 
 
 def test_category_init(category1: Category, product1: Product, product2: Product, product3: Product) -> None:
@@ -48,7 +48,7 @@ def test_category_init(category1: Category, product1: Product, product2: Product
     assert len(category1.product_list) == 3
 
     assert category1.category_count == 1
-    assert category1.product_count == 3
+    assert category1.product_count == 27
     assert category1.product_list == [product1, product2, product3]
 
 

@@ -15,6 +15,17 @@ class Product:
         self.__price = price
         self.quantity = quantity
 
+    def __str__(self) -> str:
+        """Возвращает строковое представление объекта Product,
+        включающее имя, цену и количество в наличии"""
+        return f"{self.name}, {int(self.__price)} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other: object) -> float:
+        """Суммирует стоимость товаров двух объектов Product"""
+        if not isinstance(other, Product):
+            return NotImplemented
+        return self.quantity * self.price + other.quantity * other.price
+
     @classmethod
     def new_product(
         cls, product_data: dict[str, Any], existing_products: Optional[List["Product"]] = None
@@ -71,7 +82,13 @@ class Category:
         self.description = description
         self.__products = products
         Category.category_count += 1
-        Category.product_count += len(products)
+        Category.product_count += sum(p.quantity for p in products)
+
+    def __str__(self) -> str:
+        """Возвращает строковое представление объекта Category,
+        включающее имя и общее количество"""
+        total_quantity = sum(p.quantity for p in self.__products)
+        return f"{self.name}, количество продуктов: {total_quantity}"
 
     def add_product(self, product: Product) -> None:
         self.__products.append(product)
@@ -81,14 +98,15 @@ class Category:
     def products(self) -> str:
         result = ""
         for product in self.__products:
-            result += f"{product.name}, {int(product.price)} руб. Остаток: {product.quantity} шт.\n"
+            result += f"{str(product)}\n"
         return result
 
     @property
     def product_list(self) -> List[Product]:
         return self.__products
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
     product2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
     product3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
@@ -100,7 +118,7 @@ if __name__ == '__main__':
     category1 = Category(
         "Смартфоны",
         "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни",
-        [product1, product2, product3]
+        [product1, product2, product3],
     )
 
     print(str(category1))
