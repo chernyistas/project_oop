@@ -22,9 +22,10 @@ class Product:
 
     def __add__(self, other: object) -> float:
         """Суммирует стоимость товаров двух объектов Product"""
-        if not isinstance(other, Product):
-            return NotImplemented
-        return self.quantity * self.price + other.quantity * other.price
+        if isinstance(other, type(self)):
+            return self.quantity * self.price + other.quantity * other.price
+        else:
+            raise TypeError
 
     @classmethod
     def new_product(
@@ -68,6 +69,46 @@ class Product:
             print("Цена не должна быть нулевая или отрицательная")
 
 
+class Smartphone(Product):
+    """Класс представляющий товар - смартфоны"""
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        efficiency: float,
+        model: str,
+        memory: int,
+        color: str,
+    ):
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+
+class LawnGrass(Product):
+    """Класс представляющий товар - трава газонная"""
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        country: str,
+        germination_period: str,
+        color: str,
+    ):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
+
+
 class Category:
     """Класс представляющий категории товаров"""
 
@@ -92,8 +133,11 @@ class Category:
 
     def add_product(self, product: Product) -> None:
         """Добавляет продукт в категорию"""
-        self.__products.append(product)
-        Category.product_count += 1
+        if isinstance(product, Product):
+            self.__products.append(product)
+            Category.product_count += product.quantity
+        else:
+            raise TypeError("Добавлять можно только объекты класса Product или его наследников")
 
     @property
     def products(self) -> str:

@@ -1,6 +1,6 @@
 import pytest
 
-from src.models import Category, Product, ProductIterator
+from src.models import Category, LawnGrass, Product, ProductIterator, Smartphone
 
 
 def test_product_init(product1: Product, product2: Product, product3: Product) -> None:
@@ -126,8 +126,8 @@ def test_product_add(product1: Product, product2: Product) -> None:
     assert result == 2580000
 
     not_a_product = "not a product"
-    result = product1.__add__(not_a_product)
-    assert result is NotImplemented
+    with pytest.raises(TypeError):
+        product1 + not_a_product
 
 
 def test_category_str(category1: Category) -> None:
@@ -144,3 +144,76 @@ def test_product_iterator(category1: Category) -> None:
 
     with pytest.raises(StopIteration):
         next(iterator)
+
+
+def test_smartphone_init(smartphone1: Smartphone, smartphone2: Smartphone) -> None:
+    """Тест на правильную инициализацию объектов Smartphone"""
+    assert smartphone1.name == "Samsung Galaxy S23 Ultra"
+    assert smartphone1.description == "256GB, Серый цвет, 200MP камера"
+    assert smartphone1.price == 180000.0
+    assert smartphone1.quantity == 5
+    assert smartphone1.efficiency == 95.5
+    assert smartphone1.model == "S23 Ultra"
+    assert smartphone1.memory == 256
+    assert smartphone1.color == "Серый"
+
+    assert smartphone2.name == "Iphone 15"
+    assert smartphone2.description == "512GB, Gray space"
+    assert smartphone2.price == 210000.0
+    assert smartphone2.quantity == 8
+    assert smartphone2.efficiency == 98.2
+    assert smartphone2.model == "15"
+    assert smartphone2.memory == 512
+    assert smartphone2.color == "Gray space"
+
+
+def test_lawngrass_init(grass1: LawnGrass, grass2: LawnGrass) -> None:
+    """Тест на правильную инициализацию объектов LawnGrass"""
+
+    assert grass1.name == "Газонная трава"
+    assert grass1.description == "Элитная трава для газона"
+    assert grass1.price == 500.0
+    assert grass1.quantity == 20
+    assert grass1.country == "Россия"
+    assert grass1.germination_period == "7 дней"
+    assert grass1.color == "Зеленый"
+
+    assert grass2.name == "Газонная трава 2"
+    assert grass2.description == "Выносливая трава"
+    assert grass2.price == 450.0
+    assert grass2.quantity == 15
+    assert grass2.country == "США"
+    assert grass2.germination_period == "5 дней"
+    assert grass2.color == "Темно-зеленый"
+
+
+def test_smartphone_sum(smartphone1: Smartphone, smartphone2: Smartphone) -> None:
+    """Тест на проверку суммирования стоимости товаров двух объектов Smartphone"""
+    smartphone_sum = smartphone1 + smartphone2
+    assert smartphone_sum == 2580000.0
+
+
+def test_grass_sum(grass1: LawnGrass, grass2: LawnGrass) -> None:
+    """Тест на проверку суммирования стоимости товаров двух объектов LawnGrass"""
+    grass_sum = grass1 + grass2
+    assert grass_sum == 16750.0
+
+
+def test_invalid_sum(smartphone1: Smartphone, grass1: LawnGrass) -> None:
+    """Тест на проверку суммирования стоимости двух объектов разных классов - Smartphone и LawnGrass"""
+    with pytest.raises(TypeError):
+        smartphone1 + grass1
+
+
+def test_add_smartphone_to_category(smartphone1: Smartphone, smartphone2: Smartphone, smartphone3: Smartphone) -> None:
+    """Тест на добавления товара смартфон в категорию смартфоны"""
+    category_smartphones = Category("Смартфоны", "Высокотехнологичные смартфоны", [smartphone1, smartphone2])
+    category_smartphones.add_product(smartphone3)
+    assert category_smartphones.products == (
+        "Samsung Galaxy S23 Ultra, 180000 руб. Остаток: 5 шт.\n"
+        "Iphone 15, 210000 руб. Остаток: 8 шт.\n"
+        "Xiaomi Redmi Note 11, 31000 руб. Остаток: 14 шт.\n"
+    )
+
+    with pytest.raises(TypeError):
+        category_smartphones.add_product("Not a product")  # type: ignore
