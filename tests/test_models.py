@@ -1,6 +1,6 @@
 import pytest
 
-from src.models import Category, LawnGrass, Product, ProductIterator, Smartphone
+from src.models import Category, LawnGrass, Order, Product, ProductIterator, Smartphone
 
 
 def test_product_init(product1: Product, product2: Product, product3: Product) -> None:
@@ -217,3 +217,10 @@ def test_add_smartphone_to_category(smartphone1: Smartphone, smartphone2: Smartp
 
     with pytest.raises(TypeError):
         category_smartphones.add_product("Not a product")  # type: ignore
+
+
+def test_order_init(product1: Product) -> None:
+    """Тест на цену и отображение информации о заказе для класса Order"""
+    order = Order(product1, 2)
+    assert order.total_price == 360000.0
+    assert str(order) == "Заказ: Samsung Galaxy S23 Ultra, количество: 2, итоговая стоимость: 360000.0 руб."
