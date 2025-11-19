@@ -1,7 +1,10 @@
 from typing import Any, List, Optional
 
+from src.base_product import BaseOrderCategory, BaseProduct
+from src.print_mixin import PrintMixin
 
-class Product:
+
+class Product(BaseProduct, PrintMixin):
     """Класс представляющий продукты"""
 
     name: str
@@ -14,6 +17,7 @@ class Product:
         self.description = description
         self.__price = price
         self.quantity = quantity
+        super().__init__()
 
     def __str__(self) -> str:
         """Возвращает строковое представление объекта Product,
@@ -109,7 +113,7 @@ class LawnGrass(Product):
         self.color = color
 
 
-class Category:
+class Category(BaseOrderCategory):
     """Класс представляющий категории товаров"""
 
     name: str
@@ -154,6 +158,19 @@ class Category:
 
     def __iter__(self) -> "ProductIterator":
         return ProductIterator(self)
+
+
+class Order(BaseOrderCategory):
+    """Класс представляющий заказ"""
+
+    def __init__(self, product: "Product", quantity: int):
+        self.product = product
+        self.quantity = quantity
+        self.total_price = product.price * quantity
+
+    def __str__(self) -> str:
+        """Возвращает строку с информацией о заказе"""
+        return f"Заказ: {self.product.name}, количество: {self.quantity}, итоговая стоимость: {self.total_price} руб."
 
 
 class ProductIterator:
