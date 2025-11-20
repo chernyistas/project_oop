@@ -2,7 +2,6 @@ from typing import Any
 
 import pytest
 
-
 from src.models import Category, LawnGrass, Order, Product, ProductIterator, Smartphone
 
 
@@ -271,6 +270,6 @@ def test_order_zero_product_count_add(capsys: Any) -> None:
     product = Product("Iphone 15", "512GB, Gray space", 210000.0, 1)
     product.quantity = 0
     Order(product, 2)
-    output = capsys.readouterr().out
-    assert "Нельзя добавлять товар с нулевым количеством." in output
-    assert "Обработка добавления товара завершена." in output
+    message = capsys.readouterr().out
+    assert "Нельзя добавлять товар с нулевым количеством." in message
+    assert "Обработка добавления товара завершена." in message
