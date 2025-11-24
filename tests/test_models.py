@@ -1,3 +1,5 @@
+from typing import Any
+
 import pytest
 
 from src.models import Category, LawnGrass, Order, Product, ProductIterator, Smartphone
@@ -224,3 +226,50 @@ def test_order_init(product1: Product) -> None:
     order = Order(product1, 2)
     assert order.total_price == 360000.0
     assert str(order) == "Заказ: Samsung Galaxy S23 Ultra, количество: 2, итоговая стоимость: 360000.0 руб."
+
+
+def test_zero_quantity() -> None:
+    """Тест на продукт с нулевым количеством"""
+    with pytest.raises(ValueError):
+        Product("Iphone 15", "512GB, Gray space", 210000.0, 0)
+
+
+def test_middle_price_valid(category1: Category) -> None:
+    """Тест на среднюю цену всех товаров в категории"""
+    assert category1.middle_price() == 140333.3
+
+
+def test_invalid_middle_price() -> None:
+    """Тест на среднюю цену пустой категории без продуктов"""
+    category_empty = Category("Пустая категория", "Категория без продуктов", [])
+    assert category_empty.middle_price() == 0
+
+
+def test_custom_exception_error_message(capsys: Any) -> None:
+    """Тест на вывод сообщений при добавлении товаров с нулевым количеством"""
+
+    Category("name", "desc", [])
+
+    message = capsys.readouterr()
+    assert message.out.strip().split("\n")[-2] == "Нельзя добавлять товар с нулевым количеством."
+    assert message.out.strip().split("\n")[-1] == "Обработка добавления товара завершена."
+
+
+def test_custom_exception_valid_message(capsys: Any, product1: Product, product2: Product, product3: Product) -> None:
+    """Тест на вывод сообщений при добавлении товаров"""
+
+    Category("Смартфоны", "Категория смартфонов", [product1, product2, product3])
+
+    message = capsys.readouterr()
+    assert message.out.strip().split("\n")[-2] == "Товар успешно добавлен."
+    assert message.out.strip().split("\n")[-1] == "Обработка добавления товара завершена."
+
+
+def test_order_zero_product_count_add(capsys: Any) -> None:
+    """Тест на вывод сообщения при попытке добавить неправильное количество товара"""
+    product = Product("Iphone 15", "512GB, Gray space", 210000.0, 1)
+    product.quantity = 0
+    Order(product, 2)
+    message = capsys.readouterr().out
+    assert "Нельзя добавлять товар с нулевым количеством." in message
+    assert "Обработка добавления товара завершена." in message

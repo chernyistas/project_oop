@@ -1,6 +1,7 @@
 from typing import Any, List, Optional
 
 from src.base_product import BaseOrderCategory, BaseProduct
+from src.exception import ZeroProductCount
 from src.print_mixin import PrintMixin
 
 
@@ -16,7 +17,11 @@ class Product(BaseProduct, PrintMixin):
         self.name = name
         self.description = description
         self.__price = price
-        self.quantity = quantity
+        if quantity > 0:
+            self.quantity = quantity
+        else:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
+
         super().__init__()
 
     def __str__(self) -> str:
@@ -126,6 +131,17 @@ class Category(BaseOrderCategory):
         self.name = name
         self.description = description
         self.__products = products
+        try:
+            if not products or any(p.quantity == 0 for p in products):
+                raise ZeroProductCount("Нельзя добавлять товар с нулевым количеством.")
+        except ZeroProductCount as e:
+            print(str(e))
+        else:
+
+            print("Товар успешно добавлен.")
+        finally:
+            print("Обработка добавления товара завершена.")
+
         Category.category_count += 1
         Category.product_count += sum(p.quantity for p in products)
 
@@ -159,12 +175,30 @@ class Category(BaseOrderCategory):
     def __iter__(self) -> "ProductIterator":
         return ProductIterator(self)
 
+    def middle_price(self) -> float:
+        """Метод, который подсчитывает средний ценник всех товаров"""
+        try:
+            return round(sum(product.price for product in self.__products) / len(self.__products), 1)
+        except ZeroDivisionError:
+            return 0
+
 
 class Order(BaseOrderCategory):
     """Класс представляющий заказ"""
 
     def __init__(self, product: "Product", quantity: int):
-        self.product = product
+        """Конструктор класса представляющий заказ"""
+        try:
+            if product.quantity == 0:
+                raise ZeroProductCount("Нельзя добавлять товар с нулевым количеством.")
+        except ZeroProductCount as e:
+            print(str(e))
+        else:
+            self.product = product
+            print("Товар успешно добавлен.")
+        finally:
+            print("Обработка добавления товара завершена.")
+
         self.quantity = quantity
         self.total_price = product.price * quantity
 
